@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>EFWAIZY ROOM · English 4-6</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background: #0e0e1a;
+      overflow-x: hidden;
+      color: #fff;
+    }
+
+    /* 3D & parallax container */
+    .scene {
+      perspective: 1200px;
+      transform-style: preserve-3d;
+    }
+
+    .parallax-layer {
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+      will-change: transform;
+    }
+
+    /* header – brand with 3D float */
+    .brand-header {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      position: relative;
+      background: radial-gradient(circle at 20% 30%, #1a1a2e, #0a0a14);
+      box-shadow: inset 0 0 80px rgba(0, 20, 40, 0.8);
+      transform: translateZ(0);
+    }
+
+    .brand-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" opacity="0.08"><path d="M400 50L550 200L700 150L600 350L750 500L550 550L400 700L250 550L50 500L200 350L100 150L250 200Z" fill="none" stroke="%23a0c0ff" stroke-width="2" /></svg>') no-repeat center/cover;
+      pointer-events: none;
+      transform: rotateX(6deg) rotateY(-8deg) scale(1.1);
+      filter: blur(2px);
+    }
+
+    /* 3D floating brand */
+    .brand-3d {
+      transform: rotateX(4deg) rotateY(6deg) translateZ(40px);
+      transition: transform 0.2s ease;
+      text-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(70, 130, 255, 0.3);
+      background: linear-gradient(145deg, #ffffff20, #ffffff08);
+      backdrop-filter: blur(12px) saturate(180%);
+      padding: 2rem 3.5rem;
+      border-radius: 60px 20px 60px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 30px 60px -20px #000000cc, 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+      margin-bottom: 1.2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand-3d h1 {
+      font-size: clamp(2.8rem, 12vw, 5.6rem);
+      font-weight: 700;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, #f6f9ff, #b8d0ff, #7aa5ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 30px #3f7bff55;
+      transform: translateZ(20px);
+    }
+
+    .brand-3d .sub {
+      font-size: clamp(1rem, 2.5vw, 1.6rem);
+      letter-spacing: 8px;
+      color: #b8ceff;
+      text-shadow: 0 4px 20px #001a66;
+      -webkit-text-fill-color: #b8ceff;
+      background: none;
+      margin-top: 0.2rem;
+      opacity: 0.9;
+      border-top: 1px solid #ffffff30;
+      padding-top: 0.6rem;
+      display: inline-block;
+    }
+
+    /* kelas 4-6 badge 3d */
+    .badge-3d {
+      transform: rotateX(-2deg) rotateY(4deg) translateZ(30px);
+      background: rgba(20, 40, 80, 0.5);
+      backdrop-filter: blur(16px);
+      padding: 0.8rem 2.2rem;
+      border-radius: 80px;
+      border: 1px solid rgba(255, 215, 100, 0.25);
+      box-shadow: 0 20px 40px -10px #000000aa, 0 0 30px #2f6eff33;
+      font-weight: 400;
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      color: #ffe9b6;
+      letter-spacing: 3px;
+      display: inline-flex;
+      gap: 0.8rem;
+      align-items: center;
+      margin-top: 0.5rem;
+      z-index: 2;
+      position: relative;
+    }
+
+    .badge-3d span {
+      background: #f5b04220;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      border-left: 2px solid #ffb347;
+      border-right: 2px solid #ffb347;
+      font-weight: 600;
+      color: #ffd78a;
+    }
+
+    /* parallax cards section */
+    .cards-section {
+      padding: 5rem 1.5rem 7rem;
+      max-width: 1300px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 5;
+      transform: translateZ(10px);
+    }
+
+    .grid-3d {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2.2rem;
+      perspective: 1000px;
+    }
+
+    .card-item {
+      background: rgba(18, 25, 45, 0.55);
+      backdrop-filter: blur(18px) saturate(160%);
+      border-radius: 40px 12px 40px 12px;
+      padding: 2.2rem 1.8rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 30px 50px -20px #000000dd, 0 0 0 1px #ffffff0a inset;
+      transition: all 0.25s ease;
+      transform: rotateX(2deg) rotateY(2deg) translateZ(10px);
+      color: #eef3ff;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .card-item:hover {
+      transform: rotateX(0deg) rotateY(6deg) translateZ(30px) scale(1.02);
+      border-color: #7aadff66;
+      box-shadow: 0 40px 70px -10px #0022aa55, 0 0 30px #3a7bff33;
+      background: rgba(28, 40, 75, 0.7);
+    }
+
+    .card-item h3 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #d6e5ff, #a3c0ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+      border-bottom: 1px dashed #5f8aff40;
+      padding-bottom: 0.6rem;
+    }
+
+    .card-item p {
+      line-height: 1.7;
+      font-weight: 300;
+      color: #c5d6ff;
+      font-size: 1rem;
+    }
+
+    .card-item .emoji-big {
+      font-size: 2.6rem;
+      filter: drop-shadow(0 10px 20px #00000066);
+      transform: translateZ(15px);
+      display: inline-block;
+    }
+
+    .btn-3d {
+      margin-top: 0.8rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid #6d94ff60;
+      border-radius: 40px;
+      padding: 0.6rem 1.8rem;
+      align-self: flex-start;
+      color: #b7cdff;
+      font-weight: 500;
+      letter-spacing: 1px;
+      backdrop-filter: blur(4px);
+      transition: 0.2s;
+      box-shadow: 0 10px 20px -10px #00000099;
+      transform: translateZ(8px);
+      cursor: default;
+    }
+
+    .btn-3d:hover {
+      background: #3a6eff30;
+      border-color: #9bbaff;
+      color: #fff;
+      box-shadow: 0 0 30px #2a6eff44;
+      transform: translateZ(20px) scale(1.02);
+    }
+
+    /* footer parallax */
+    .footer-3d {
+      padding: 3rem 1.5rem;
+      text-align: center;
+      border-top: 1px solid #ffffff10;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      transform: translateZ(5px);
+      margin-top: 2rem;
+      letter-spacing: 2px;
+      color: #8ba4dd;
+      font-weight: 300;
+      box-shadow: 0 -20px 60px -30px #000000ff;
+    }
+
+    .footer-3d small {
+      opacity: 0.7;
+      display: block;
+      margin-top: 0.4rem;
+      font-size: 0.8rem;
+    }
+
+    /* responsive */
+    @media (max-width: 600px) {
+      .brand-3d {
+        padding: 1.5rem 1.8rem;
+        border-radius: 40px 12px 40px 12px;
+      }
+      .grid-3d {
+        gap: 1.5rem;
+      }
+      .badge-3d {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 0.6rem 1.2rem;
+      }
+    }
+
+    /* simulated parallax movement via mouse (pure css fallback + inline js) */
+    .parallax-mouse {
+      transition: transform 0.08s linear;
+    }
+  </style>
+</head>
+<body>
+<div class="scene" id="scene">
+  <div class="parallax-layer" id="parallaxLayer">
+
+    <!-- HEADER dengan brand 3D -->
+    <header class="brand-header">
+      <div class="brand-3d" id="brand3d">
+        <h1>EFWAIZY ROOM</h1>
+        <div class="sub">✦ ENGLISH 4–6 ✦</div>
+      </div>
+      <div class="badge-3d" id="badge3d">
+        <span>📘</span> Grades 4 · 5 · 6 <span>🎯</span>
+      </div>
+      <div style="margin-top: 1.8rem; font-size: 0.95rem; letter-spacing: 2px; color: #a0bbf0; background: #00000030; padding: 0.6rem 1.8rem; border-radius: 60px; backdrop-filter: blur(8px); border: 1px solid #ffffff10; transform: translateZ(20px);">
+        ⚡ learn · speak · shine
+      </div>
+    </header>
+
+    <!-- KARTU KELAS 4-6 dengan efek 3D & paralax -->
+    <section class="cards-section">
+      <div class="grid-3d">
+        <div class="card-item" id="card1">
+          <span class="emoji-big">📖</span>
+          <h3>Grade 4</h3>
+          <p>Stories & vocabulary · fun grammar · speaking games</p>
+          <div class="btn-3d">explore →</div>
+        </div>
+        <div class="card-item" id="card2">
+          <span class="emoji-big">✍️</span>
+          <h3>Grade 5</h3>
+          <p>Writing practice · tenses · daily conversations</p>
+          <div class="btn-3d">explore →</div>
+        </div>
+        <div class="card-item" id="card3">
+          <span class="emoji-big">🗣️</span>
+          <h3>Grade 6</h3>
+          <p>Fluency · reading comprehension · project based</p>
+          <div class="btn-3d">explore →</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer-3d">
+      <div>© EFWAIZY ROOM · premium english for young minds</div>
+      <small>✨ 3D parallax · ready to deploy</small>
+    </footer>
+
+  </div>
+</div>
+
+<script>
+  (function() {
+    const layer = document.getElementById('parallaxLayer');
+    const brand = document.getElementById('brand3d');
+    const badge = document.getElementById('badge3d');
+    const cards = document.querySelectorAll('.card-item');
+
+    let mouseX = 0, mouseY = 0;
+    let targetX = 0, targetY = 0;
+
+    function updateParallax(e) {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      // normalized mouse position (-1 .. 1)
+      const nx = (e.clientX / w) * 2 - 1;
+      const ny = (e.clientY / h) * 2 - 1;
+
+      mouseX = nx * 0.8;   // max tilt
+      mouseY = ny * 0.8;
+    }
+
+    function animate() {
+      // smooth interpolation
+      targetX += (mouseX - targetX) * 0.08;
+      targetY += (mouseY - targetY) * 0.08;
+
+      // apply parallax to main layer (shift + rotate)
+      const shiftX = targetX * 18;    // translate
+      const shiftY = targetY * 12;
+      const rotX = targetY * 3.5;
+      const rotY = targetX * 5;
+
+      layer.style.transform = `
+        translateZ(0px) 
+        translateX(${shiftX * 0.3}px) 
+        translateY(${shiftY * 0.3}px) 
+        rotateX(${rotX * 0.6}deg) 
+        rotateY(${rotY * 0.6}deg)
+      `;
+
+      // brand & badge extra 3D depth
+      brand.style.transform = `
+        rotateX(${4 + targetY * 2.5}deg) 
+        rotateY(${6 + targetX * 3}deg) 
+        translateZ(${40 + Math.abs(targetX) * 10}px)
+      `;
+
+      badge.style.transform = `
+        rotateX(${-2 + targetY * 2}deg) 
+        rotateY(${4 + targetX * 3}deg) 
+        translateZ(${30 + Math.abs(targetY) * 8}px)
+      `;
+
+      // cards individual parallax
+      cards.forEach((card, i) => {
+        const offset = (i + 1) * 2;
+        const rx = targetY * (3 + i * 0.7);
+        const ry = targetX * (4 + i * 0.5);
+        const tz = 12 + Math.abs(targetX + targetY) * 6;
+        card.style.transform = `
+          rotateX(${2 + rx * 0.8}deg) 
+          rotateY(${2 + ry * 0.8}deg) 
+          translateZ(${tz}px) 
+          scale(${1 + (Math.abs(targetX) + Math.abs(targetY)) * 0.008})
+        `;
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    // mouse events
+    window.addEventListener('mousemove', updateParallax, { passive: true });
+    // touch events for mobile
+    window.addEventListener('touchmove', function(e) {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        updateParallax({ clientX: touch.clientX, clientY: touch.clientY });
+      }
+    }, { passive: true });
+
+    // start animation
+    animate();
+
+    // reset on leave window
+    window.addEventListener('mouseleave', function() {
+      mouseX = 0;
+      mouseY = 0;
+    });
+  })();
+</script>
+
+<!-- ready to deploy – all inline, no external resources -->
+</body>
+</html>
